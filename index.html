@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYA | My World ❤️</title>
+    <style>
+        :root {
+            --primary: #ff4d94;
+            --bg: #0f041d;
+            --glass: rgba(255, 77, 148, 0.1);
+            --glow: 0 0 20px rgba(255, 77, 148, 0.6);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1a0a2e, #0f041d);
+        }
+
+        /* --- القلوب والنجوم الموحدة (تظهر في كل مكان) --- */
+        .falling-item {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px var(--primary));
+            user-select: none;
+        }
+
+        /* --- شاشة التحميل (Splash) --- */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 8000;
+        }
+
+        .loader-box {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid var(--primary);
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), var(--glow);
+        }
+
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+
+        .loader-circle {
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(255, 77, 148, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            filter: drop-shadow(0 0 8px var(--primary));
+        }
+
+        .inner-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 26px;
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px var(--primary));
+            animation: heartPulse 1s ease-in-out infinite;
+        }
+
+        /* --- شاشة الباسورد (Login) --- */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 7000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), var(--glow);
+        }
+
+        .login-card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 20px;
+            box-shadow: var(--glow);
+            object-fit: cover;
+        }
+
+        /* --- المحتوى الرئيسي --- */
+        #main-content {
+            display: none;
+        }
+
+        #hero-section {
+            height: 100vh;
+            position: relative;
+            background: url('hero-bg.jpeg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 4, 29, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* العداد */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: var(--glass);
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .timer-item {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 12px;
+            min-width: 80px;
+            border: 1px solid var(--primary);
+        }
+
+        .timer-item span {
+            display: block;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: var(--glow);
+        }
+
+        /* الكروت والصور */
+        /* --- تنسيق الكروت المعدل --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        .card {
+            height: 120px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            box-shadow: var(--glow);
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .card-front {
+            background: var(--glass);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .card-back {
+            background: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+            font-size: 14px;
+        }
+
+        .photo-box img {
+            width: 100%;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        /* المدخلات والأزرار */
+        input {
+            padding: 15px;
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 15px;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            box-shadow: var(--glow);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #typewriter-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 4, 29, 0.95);
+            backdrop-filter: blur(15px);
+            width: 85%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 25px;
+            border: 2px solid var(--primary);
+            z-index: 10000;
+            /* عشان يظهر فوق كل حاجة */
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), var(--glow);
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes heartPulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="splash-screen">
+        <div class="loader-box">
+            <div class="spinner-container">
+                <div class="loader-circle"></div>
+                <div class="inner-heart">❤️</div>
+            </div>
+            <h2 id="load-text" style="color: var(--primary); text-shadow: var(--glow);">جاري التحميل...</h2>
+        </div>
+    </div>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <img src="aya.jpeg" alt="AYA">
+            <h2 style="color: var(--primary); margin-bottom: 20px; text-shadow: var(--glow);">جاهزة 🤔🥰</h2>
+            <p>كل اللى هنا هيفضل بينى وبينك طول العمر🥺</p>
+            <input type="password" id="passField" placeholder="أكتبى moseera">
+            <button onclick="checkPass()">افتحي قلبي</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <section id="hero-section">
+            <div class="overlay"></div>
+            <div class="hero-content">
+                <h1
+                    style="font-size: 60px; color: var(--primary); margin:0; filter: drop-shadow(0 0 10px var(--primary));">
+                    AYA</h1>
+                <p style="color: var(--primary); font-weight: bold;">إنتي العمر كله ❤️</p>
+                <div class="timer-grid">
+                    <div class="timer-item"><span id="years">0</span><label>سنة</label></div>
+                    <div class="timer-item"><span id="months">0</span><label>شهر</label></div>
+                    <div class="timer-item"><span id="days">0</span><label>يوم</label></div>
+                    <div class="timer-item"><span id="hours">0</span><label>ساعة</label></div>
+                    <div class="timer-item"><span id="minutes">0</span><label>دقيقة</label></div>
+                    <div class="timer-item"><span id="seconds">0</span><label>ثانية</label></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 style="color: var(--primary); text-shadow: var(--glow); margin-bottom: 30px;">أجمل 4 صور لينا ✨</h2>
+            <div class="photo-box" style="margin-bottom: 20px;"><img src="photo1.jpeg">
+                <p>"أول مرة حسيت إن الدنيا ضحكتلي"</p>
+            </div>
+            <div class="photo-box" style="margin-bottom: 20px;"><img src="photo2.jpeg">
+                <p>"ضحكتك اللي بتنسيني همومي"</p>
+            </div>
+            <div class="photo-box" style="margin-bottom: 20px;"><img src="photo3.jpeg">
+                <p>"كل صورة معاكي بتمثل عمر جديد"</p>
+            </div>
+            <div class="photo-box" style="margin-bottom: 20px;"><img src="photo4.jpeg">
+                <p>"معاكي لآخر نفس في حياتي"</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 style="color: var(--primary); text-shadow: var(--glow); margin-bottom: 30px;">4 رسائل مفاجأة 🎁</h2>
+            <div class="cards-container">
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">رسالة 1 ❤️</div>
+                        <div class="card-back">أنتي أجمل صدفة في عمري كله.</div>
+                    </div>
+                </div>
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">رسالة 2 ✨</div>
+                        <div class="card-back">ضحكتك هي اللي بتنورلي يومي.</div>
+                    </div>
+                </div>
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">رسالة 3 🌸</div>
+                        <div class="card-back">وجودك جنبي هو الأمان الحقيقي.</div>
+                    </div>
+                </div>
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">رسالة 4 💎</div>
+                        <div class="card-back">هفضل أحبك لآخر نفس فيا.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <button onclick="startTyping()" style="width: auto;">لسه مخلصتش دوسي هنا 🔒</button>
+        </section>
+    </div>
+
+    <div id="typewriter-box">
+        <h3 style="color: var(--primary); margin-top: 0;">كلمة ليكي ❤️</h3>
+        <p id="typed-text" style="color: var(--primary); font-size: 18px; line-height: 1.6; min-height: 50px;"></p>
+        <button onclick="closeBox()" style="margin-top: 20px; width: auto; padding: 10px 30px;">إغلاق</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // دالة القلوب والنجوم الموحدة
+        function createGlobalEffects() {
+            const symbols = ['❤️', '✨', '💕', '⭐', '🌸'];
+            setInterval(() => {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                item.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                item.style.left = Math.random() * 100 + 'vw';
+                item.style.top = '-20px';
+                item.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                document.body.appendChild(item);
+
+                item.animate([
+                    { top: '-20px', opacity: 1, transform: 'rotate(0deg)' },
+                    { top: '110vh', opacity: 0, transform: `rotate(${Math.random() * 360}deg)` }
+                ], { duration: 4000 + Math.random() * 3000 }).onfinish = () => item.remove();
+            }, 300);
+        }
+
+        // تشغيل المؤثرات فوراً عند فتح الصفحة
+        createGlobalEffects();
+
+        // منطق الشاشات
+        setTimeout(() => { document.getElementById('load-text').innerText = "ثواني يا روحي ❤️😂✨"; }, 1500);
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+        }, 3500);
+
+        function checkPass() {
+            if (document.getElementById('passField').value.toLowerCase() === 'moseera') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('bgMusic').play();
+                document.body.style.overflow = 'auto';
+                startCounter();
+                window.addEventListener('scroll', () => {
+                    document.querySelectorAll('.section').forEach(s => {
+                        if (s.getBoundingClientRect().top < window.innerHeight - 100) s.classList.add('active');
+                    });
+                });
+            } else { alert('خطأ يا روحي!'); }
+        }
+
+        function startCounter() {
+            const start = new Date("2021-04-04T00:00:00");
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - start;
+                document.getElementById('years').innerText = Math.floor(diff / 31557600000);
+                document.getElementById('months').innerText = Math.floor((diff % 31557600000) / 2629800000);
+                document.getElementById('days').innerText = Math.floor((diff % 2629800000) / 86400000);
+                document.getElementById('hours').innerText = Math.floor((diff % 86400000) / 3600000);
+                document.getElementById('minutes').innerText = Math.floor((diff % 3600000) / 60000);
+                document.getElementById('seconds').innerText = Math.floor((diff % 60000) / 1000);
+            }, 1000);
+        }
+
+        function startTyping() {
+            const box = document.getElementById('typewriter-box');
+            const txt = document.getElementById('typed-text');
+            const msg = "كل عام وإحنا مع بعض يا أغلى ما في حياتي، أنتي أحلى حاجة حصلت لي في الدنيا ❤️";
+
+            box.style.display = 'block';
+            txt.innerHTML = ""; // بيمسح النص القديم عشان يبدأ يكتب من جديد
+
+            let i = 0;
+            function type() {
+                if (i < msg.length) {
+                    txt.innerHTML += msg.charAt(i);
+                    i++;
+                    setTimeout(type, 60); // سرعة الكتابة
+                }
+            }
+            type();
+        }
+
+        function closeBox() {
+            document.getElementById('typewriter-box').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
