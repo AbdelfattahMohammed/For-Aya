@@ -346,7 +346,7 @@
             <img src="aya.jpeg" alt="AYA">
             <h2 style="color: var(--primary); margin-bottom: 20px; text-shadow: var(--glow);">جاهزة 🤔🥰</h2>
             <p>كل اللى هنا هيفضل بينى وبينك طول العمر🥺</p>
-            <input type="password" id="passField" placeholder="أكتبى moseera">
+            <input type="password" id="passField" placeholder="Password...">
             <button onclick="checkPass()">افتحي قلبي</button>
         </div>
     </div>
@@ -416,13 +416,14 @@
                 <div class="card" onclick="this.classList.toggle('flipped')">
                     <div class="card-inner">
                         <div class="card-front">رسالة 5 💋</div>
-                        <div class="card-back">انت حياتي وعمري وعوضتني عن كل وجع اتوجعتة انت عوضي بحبك  </div>
+                        <div class="card-back">انت حياتي وعمري وعوضتني عن كل وجع اتوجعتة انت عوضي بحبك </div>
                     </div>
                 </div>
                 <div class="card" onclick="this.classList.toggle('flipped')">
                     <div class="card-inner">
                         <div class="card-front">رسالة 6 🎀</div>
-                        <div class="card-back">عمري ما حسيت بامان في حياتي بس انت جيت نسيتني كل وجعي وخلتني اعرف اضحك من قلبي بجد</div>
+                        <div class="card-back">عمري ما حسيت بامان في حياتي بس انت جيت نسيتني كل وجعي وخلتني اعرف اضحك من
+                            قلبي بجد</div>
                     </div>
                 </div>
             </div>
@@ -439,6 +440,17 @@
         <button onclick="closeBox()" style="margin-top: 20px; width: auto; padding: 10px 30px;">إغلاق</button>
     </div>
 
+    <section class="section">
+        <button onclick="startTyping2()" style="width: auto;">الرسالة الخاصة التانية 🔒</button>
+    </section>
+
+    <div id="typewriter-box-2"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(15, 4, 29, 0.95); backdrop-filter: blur(15px); width: 85%; max-width: 400px; padding: 30px; border-radius: 25px; border: 2px solid var(--primary); z-index: 10000; text-align: center; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), var(--glow);">
+        <h3 style="color: var(--primary); margin-top: 0;">رسالة خاصة ليكي ❤️</h3>
+        <p id="typed-text-2" style="color: var(--primary); font-size: 18px; line-height: 1.6; min-height: 50px;"></p>
+        <button onclick="closeBox2()" style="margin-top: 20px; width: auto; padding: 10px 30px;">إغلاق</button>
+    </div>
+
     <audio id="bgMusic" loop>
         <source src="song.mp3" type="audio/mpeg">
     </audio>
@@ -446,7 +458,7 @@
     <script>
         // دالة القلوب والنجوم الموحدة
         function createGlobalEffects() {
-            const symbols = ['❤️', '✨', '💕', '⭐', '🌸', '😍','🦆','🦢','💏','👙'];
+            const symbols = ['❤️', '✨', '💕', '⭐', '🌸', '😍', '🦆', '🦢', '💏', '👙'];
             setInterval(() => {
                 const item = document.createElement('div');
                 item.className = 'falling-item';
@@ -479,6 +491,7 @@
                 document.getElementById('main-content').style.display = 'block';
                 document.getElementById('bgMusic').play();
                 document.body.style.overflow = 'auto';
+                window.scrollTo(0, 0);
                 startCounter();
                 window.addEventListener('scroll', () => {
                     document.querySelectorAll('.section').forEach(s => {
@@ -524,6 +537,30 @@
         function closeBox() {
             document.getElementById('typewriter-box').style.display = 'none';
         }
+
+        function startTyping2() {
+            const box = document.getElementById('typewriter-box-2');
+            const txt = document.getElementById('typed-text-2');
+            const msg = "هنا تكتبى الرسالة بتاعتك";
+
+            box.style.display = 'block';
+            txt.innerHTML = "";
+
+            let i = 0;
+            function type() {
+                if (i < msg.length) {
+                    txt.innerHTML += msg.charAt(i);
+                    i++;
+                    setTimeout(type, 60);
+                }
+            }
+            type();
+        }
+
+        function closeBox2() {
+            document.getElementById('typewriter-box-2').style.display = 'none';
+        }
+
     </script>
 </body>
 
