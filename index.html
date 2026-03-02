@@ -259,6 +259,22 @@
             box-shadow: var(--glow);
         }
 
+        /* تجهيز الصور للاختفاء قبل السكرول */
+        .photo-box {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+            /* سرعة ظهور الصورة */
+            margin-bottom: 40px;
+            /* مسافة عشان السكرول يبان */
+        }
+
+        /* لما الصورة تدخل في الشاشة */
+        .photo-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* المدخلات والأزرار */
         input {
             padding: 15px;
@@ -326,6 +342,279 @@
                 transform: translate(-50%, -50%) scale(1.2);
             }
         }
+
+        /* --- تصميم الفراشة المعتمد (مع نقاط مظللة في نهاية القرون) --- */
+        .butterfly-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10001;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+
+        .butterfly {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            transform-style: preserve-3d;
+            animation: hover 4s ease-in-out infinite;
+        }
+
+        /* جسم الفراشة ورأسها */
+        .butterfly-body {
+            position: absolute;
+            width: 10px;
+            height: 35px;
+            background: linear-gradient(to bottom, #ffb3d1, #ff4d94, #ffb3d1);
+            border-radius: 5px;
+            top: 10px;
+            left: 25px;
+            z-index: 2;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .butterfly-head {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ffb3d1;
+            border-radius: 50%;
+            top: -10px;
+            left: -1px;
+        }
+
+        /* --- القرون (تم تعديل النهايات لتصبح نقاطاً مظللة) --- */
+        .antenna {
+            position: absolute;
+            width: 1.5px;
+            height: 40px;
+            background: #ffb3d1;
+            top: -35px;
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        .antenna.left {
+            left: -6px;
+            transform: rotate(-35deg);
+        }
+
+        .antenna.right {
+            right: -6px;
+            transform: rotate(35deg);
+        }
+
+        /* النقاط المظللة في نهاية القرون */
+        .antenna::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            /* حجم النقطة */
+            height: 8px;
+            /* حجم النقطة */
+            background-color: #ffb3d1;
+            /* لون مظلل بالكامل */
+            border-radius: 50%;
+            /* شكل دائري */
+            top: -4px;
+            /* تظبيط مكان النقطة في النهاية */
+            left: 50%;
+            /* لتوسيط النقطة */
+            transform: translateX(-50%);
+            /* لتوسيط النقطة */
+            box-shadow: 0 0 8px var(--primary);
+            /* إضافة توهج للنقطة */
+        }
+
+        /* --- الذيل على شكل رقم ٨ بالعربي --- */
+        .butterfly-tail {
+            position: absolute;
+            top: 45px;
+            left: 25px;
+            width: 10px;
+            height: 45px;
+            z-index: 1;
+        }
+
+        .tail-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff4d94, transparent);
+            box-shadow: 0 0 10px var(--primary);
+            border-radius: 5px;
+        }
+
+        .tail-line.left {
+            transform: rotate(15deg);
+            left: -2px;
+        }
+
+        .tail-line.right {
+            transform: rotate(-15deg);
+            left: 8px;
+        }
+
+        /* الجناحات */
+        .wing {
+            position: absolute;
+            width: 30px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff4d94, #ffb3d1);
+            border-radius: 50% 50% 20% 50%;
+            box-shadow: 0 0 20px var(--primary);
+            top: 5px;
+        }
+
+        .left-wing {
+            left: 0;
+            transform-origin: right;
+            animation: flap-left 0.5s ease-in-out infinite;
+        }
+
+        .right-wing {
+            right: 0;
+            transform-origin: left;
+            border-radius: 50% 50% 50% 20%;
+            animation: flap-right 0.5s ease-in-out infinite;
+        }
+
+        /* الأنيميشن */
+        @keyframes flap-left {
+
+            0%,
+            100% {
+                transform: rotateY(0deg);
+            }
+
+            50% {
+                transform: rotateY(-60deg);
+            }
+        }
+
+        @keyframes flap-right {
+
+            0%,
+            100% {
+                transform: rotateY(0deg);
+            }
+
+            50% {
+                transform: rotateY(60deg);
+            }
+        }
+
+        @keyframes hover {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+        }
+
+        /* قائمة الرسائل */
+        .butterfly-options {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .butterfly-options button {
+            width: 140px !important;
+            padding: 10px !important;
+            font-size: 13px !important;
+            background: rgba(255, 77, 148, 0.2) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary) !important;
+            color: white !important;
+            border-radius: 20px !important;
+            box-shadow: var(--glow) !important;
+        }
+
+        #drawing-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+        }
+
+        #heartCanvas {
+            background: transparent;
+            filter: drop-shadow(0 0 12px #ff4d94);
+            z-index: 5;
+        }
+
+        /* نبض احترافي (عضلي) */
+        .heart-beating {
+            animation: proBeat 0.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        @keyframes proBeat {
+            0% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.1);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.06);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ابحث عن هذا الجزء وعدله كالتالي */
+        .heart-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            /* غيرها من 350 لـ 500 */
+            height: 500px;
+            /* غيرها من 350 لـ 500 */
+            margin-top: -250px;
+            /* نص الـ 500 بالسالب */
+            margin-left: -250px;
+            /* نص الـ 500 بالسالب */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .wave-animate {
+            animation: elegantRipple 0.8s ease-out forwards;
+        }
+
+        @keyframes elegantRipple {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+                stroke-width: 3;
+            }
+
+            100% {
+                transform: scale(2.2);
+                opacity: 0;
+                stroke-width: 1;
+            }
+        }
     </style>
 </head>
 
@@ -346,7 +635,7 @@
             <img src="aya.jpeg" alt="AYA">
             <h2 style="color: var(--primary); margin-bottom: 20px; text-shadow: var(--glow);">جاهزة 🤔🥰</h2>
             <p>كل اللى هنا هيفضل بينى وبينك طول العمر🥺</p>
-            <input type="password" id="passField" placeholder="Password...">
+            <input type="password" id="passField" placeholder="...Password">
             <button onclick="checkPass()">افتحي قلبي</button>
         </div>
     </div>
@@ -387,7 +676,7 @@
         </section>
 
         <section class="section">
-            <h2 style="color: var(--primary); text-shadow: var(--glow); margin-bottom: 30px;">4 رسائل مفاجأة 🎁</h2>
+            <h2 style="color: var(--primary); text-shadow: var(--glow); margin-bottom: 30px;">6 رسائل مفاجأة 🎁</h2>
             <div class="cards-container">
                 <div class="card" onclick="this.classList.toggle('flipped')">
                     <div class="card-inner">
@@ -429,9 +718,44 @@
             </div>
         </section>
 
-        <section class="section">
-            <button onclick="startTyping()" style="width: auto;">لسه مخلصتش دوسي هنا 🔒</button>
+        <div class="butterfly-menu" onclick="toggleButterflyMenu()">
+            <div class="butterfly-options" id="btf-options">
+                <button onclick="startTyping()">كلمة ليكي ❤️</button>
+                <button onclick="startTyping2()">رسالة خاصة ✨</button>
+            </div>
+
+            <div class="butterfly">
+                <div class="butterfly-body">
+                    <div class="butterfly-head">
+                        <div class="antenna left"></div>
+                        <div class="antenna right"></div>
+                    </div>
+                </div>
+
+                <div class="wing left-wing"></div>
+                <div class="wing right-wing"></div>
+
+                <div class="butterfly-tail">
+                    <div class="tail-line left"></div>
+                    <div class="tail-line right"></div>
+                </div>
+            </div>
+
+            <span
+                style="color: var(--primary); font-size: 12px; margin-top: 5px; font-weight: bold; text-shadow: var(--glow);">إلمسيني
+                ✨</span>
+        </div>
+
+        <section class="section" id="drawing-section">
+            <h2 style="color: var(--primary); text-shadow: var(--glow); margin-bottom: 20px;">نبض قلبي بالكود... ❤️</h2>
+            <canvas id="heartCanvas"></canvas>
+            <p id="drawing-msg" style="opacity: 0; transition: 2s; color: var(--primary); margin-top: 20px;">لقدر الله
+                في حياتك مبرمج... بيحبك بكل سطر كود ✨</p>
         </section>
+
+        <!-- <section class="section">
+            <button onclick="startTyping()" style="width: auto;">لسه مخلصتش دوسي هنا 🔒</button>
+        </section> -->
     </div>
 
     <div id="typewriter-box">
@@ -439,10 +763,6 @@
         <p id="typed-text" style="color: var(--primary); font-size: 18px; line-height: 1.6; min-height: 50px;"></p>
         <button onclick="closeBox()" style="margin-top: 20px; width: auto; padding: 10px 30px;">إغلاق</button>
     </div>
-
-    <section class="section">
-        <button onclick="startTyping2()" style="width: auto;">الرسالة الخاصة التانية 🔒</button>
-    </section>
 
     <div id="typewriter-box-2"
         style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(15, 4, 29, 0.95); backdrop-filter: blur(15px); width: 85%; max-width: 400px; padding: 30px; border-radius: 25px; border: 2px solid var(--primary); z-index: 10000; text-align: center; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), var(--glow);">
@@ -493,9 +813,21 @@
                 document.body.style.overflow = 'auto';
                 window.scrollTo(0, 0);
                 startCounter();
+                // الجزء المعدل داخل دالة checkPass
                 window.addEventListener('scroll', () => {
+                    // مراقبة السيكشنز الأساسية
                     document.querySelectorAll('.section').forEach(s => {
-                        if (s.getBoundingClientRect().top < window.innerHeight - 100) s.classList.add('active');
+                        if (s.getBoundingClientRect().top < window.innerHeight - 100) {
+                            s.classList.add('active');
+                        }
+                    });
+
+                    // مراقبة كل صورة (photo-box) على حدة
+                    document.querySelectorAll('.photo-box').forEach(box => {
+                        const boxTop = box.getBoundingClientRect().top;
+                        if (boxTop < window.innerHeight - 50) {
+                            box.classList.add('show');
+                        }
                     });
                 });
             } else { alert('خطأ يا روحي!'); }
@@ -560,6 +892,90 @@
         function closeBox2() {
             document.getElementById('typewriter-box-2').style.display = 'none';
         }
+
+        function toggleButterflyMenu() {
+            const options = document.getElementById('btf-options');
+            if (options.style.display === 'flex') {
+                options.style.display = 'none';
+            } else {
+                options.style.display = 'flex';
+            }
+        }
+
+        let canvas = document.getElementById('heartCanvas');
+        let ctx = canvas.getContext('2d');
+
+        // كبرنا المساحة عشان الرسمة متبانش مقصوصة
+        let width = canvas.width = 500;
+        let height = canvas.height = 500;
+
+        let i = 0;
+        let hasStarted = false;
+
+        function drawHeart() {
+            if (i > 6.3) {
+                startPerfectPulse();
+                document.getElementById('drawing-msg').style.opacity = '1';
+                return;
+            }
+
+            let t = i;
+            // معادلة قلب انسيابية جداً (Slim & Elegant)
+            let x = 16 * Math.pow(Math.sin(t), 3);
+            let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+            let scale = 13; // الحجم المناسب للمساحة الجديدة
+            let centerX = width / 2 + x * scale;
+            let centerY = height / 2 + y * scale;
+
+            ctx.lineTo(centerX, centerY);
+            ctx.strokeStyle = "#ff4d94";
+            ctx.lineWidth = 1.5; // خط رفيع واحترافي زي الفيديو
+            ctx.lineCap = "round";
+            ctx.shadowBlur = 8; // توهج خفيف مش مغطي على الرسمة
+            ctx.shadowColor = "#ff4d94";
+            ctx.stroke();
+
+            i += 0.03; // سرعة رسم هادية وشيك
+            requestAnimationFrame(drawHeart);
+        }
+
+        function startPerfectPulse() {
+            canvas.classList.add('heart-beating');
+            setInterval(() => { createPerfectWave(); }, 800);
+        }
+
+        function createPerfectWave() {
+            const container = document.getElementById('drawing-section');
+            const wave = document.createElement('div');
+            wave.className = 'heart-wave wave-animate';
+            // قلب SVG رقيق جداً للموجة
+            wave.innerHTML = `
+                <svg viewBox="0 0 100 100" style="width:100%; height:100%;">
+                    <path d="M50,88 C50,88 10,65 10,35 C10,15 30,10 50,30 C70,10 90,15 90,35 C90,65 50,88 50,88 Z" 
+                          stroke="#ff4d94" fill="none" stroke-width="1" opacity="0.5"/>
+                </svg>`;
+            container.appendChild(wave);
+            setTimeout(() => wave.remove(), 800);
+        }
+
+        window.addEventListener('scroll', () => {
+            let section = document.getElementById('drawing-section');
+            if (!section) return;
+            let pos = section.getBoundingClientRect().top;
+            if (pos < window.innerHeight - 150 && !hasStarted) {
+                hasStarted = true;
+                ctx.beginPath();
+
+                // --- عدل السطرين دول بالظبط ---
+                let startX = width / 2 + 0; // x عند t=0
+                let startY = height / 2 - (13 - 5 - 2 - 1) * 13; // y عند t=0
+                ctx.moveTo(startX, startY);
+                // ---------------------------
+
+                drawHeart();
+            }
+        });
 
     </script>
 </body>
