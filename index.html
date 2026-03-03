@@ -19,8 +19,8 @@
             background: var(--bg);
             color: white;
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            overflow: hidden;
             background: radial-gradient(circle at center, #1a0a2e, #0f041d);
+            overflow: hidden;
         }
 
         /* --- القلوب والنجوم الموحدة (تظهر في كل مكان) --- */
@@ -123,7 +123,7 @@
         }
 
         #hero-section {
-            height: 100vh;
+            min-height: 100svh;
             position: relative;
             background: url('hero-bg.jpeg') no-repeat center center/cover;
             display: flex;
@@ -582,21 +582,17 @@
         }
 
         /* ابحث عن هذا الجزء وعدله كالتالي */
-        .heart-wave {
+        /* .heart-wave {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 500px;
-            /* غيرها من 350 لـ 500 */
             height: 500px;
-            /* غيرها من 350 لـ 500 */
             margin-top: -250px;
-            /* نص الـ 500 بالسالب */
             margin-left: -250px;
-            /* نص الـ 500 بالسالب */
             pointer-events: none;
             z-index: 1;
-        }
+        } */
 
         .wave-animate {
             animation: elegantRipple 0.8s ease-out forwards;
@@ -613,6 +609,24 @@
                 transform: scale(2.2);
                 opacity: 0;
                 stroke-width: 1;
+            }
+        }
+
+        #hero-section h1 {
+            font-size: 60px;
+        }
+
+        @media (max-width: 768px) {
+            #hero-section h1 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .butterfly-menu {
+                bottom: 15px;
+                right: 15px;
+                transform: scale(0.85);
             }
         }
     </style>
@@ -644,8 +658,7 @@
         <section id="hero-section">
             <div class="overlay"></div>
             <div class="hero-content">
-                <h1
-                    style="font-size: 60px; color: var(--primary); margin:0; filter: drop-shadow(0 0 10px var(--primary));">
+                <h1 style="color: var(--primary); margin:0; filter: drop-shadow(0 0 10px var(--primary));">
                     AYA</h1>
                 <p style="color: var(--primary); font-weight: bold;">إنتي العمر كله ❤️</p>
                 <div class="timer-grid">
@@ -906,8 +919,17 @@
         let ctx = canvas.getContext('2d');
 
         // كبرنا المساحة عشان الرسمة متبانش مقصوصة
-        let width = canvas.width = 500;
-        let height = canvas.height = 500;
+        function resizeCanvas() {
+            const size = Math.min(window.innerWidth - 40, 400);
+            canvas.width = size;
+            canvas.height = size;
+            width = canvas.width;
+            height = canvas.height;
+        }
+
+        let width, height;
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
 
         let i = 0;
         let hasStarted = false;
@@ -941,23 +963,8 @@
         }
 
         function startPerfectPulse() {
-            canvas.classList.add('heart-beating');
-            setInterval(() => { createPerfectWave(); }, 800);
-        }
-
-        function createPerfectWave() {
-            const container = document.getElementById('drawing-section');
-            const wave = document.createElement('div');
-            wave.className = 'heart-wave wave-animate';
-            // قلب SVG رقيق جداً للموجة
-            wave.innerHTML = `
-                <svg viewBox="0 0 100 100" style="width:100%; height:100%;">
-                    <path d="M50,88 C50,88 10,65 10,35 C10,15 30,10 50,30 C70,10 90,15 90,35 C90,65 50,88 50,88 Z" 
-                          stroke="#ff4d94" fill="none" stroke-width="1" opacity="0.5"/>
-                </svg>`;
-            container.appendChild(wave);
-            setTimeout(() => wave.remove(), 800);
-        }
+    canvas.classList.add('heart-beating');
+}
 
         window.addEventListener('scroll', () => {
             let section = document.getElementById('drawing-section');
