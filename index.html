@@ -649,8 +649,10 @@
             <img src="aya.jpeg" alt="AYA">
             <h2 style="color: var(--primary); margin-bottom: 20px; text-shadow: var(--glow);">جاهزة 🤔🥰</h2>
             <p>كل اللى هنا هيفضل بينى وبينك طول العمر🥺</p>
-            <input type="password" id="passField" placeholder="...Password">
-            <button onclick="checkPass()">افتحي قلبي</button>
+            <form onsubmit="checkPass(); return false;">
+                <input type="password" id="passField" placeholder="...Password">
+                <button type="submit">افتحي قلبي</button>
+            </form>
         </div>
     </div>
 
@@ -963,8 +965,8 @@
         }
 
         function startPerfectPulse() {
-    canvas.classList.add('heart-beating');
-}
+            canvas.classList.add('heart-beating');
+        }
 
         window.addEventListener('scroll', () => {
             let section = document.getElementById('drawing-section');
